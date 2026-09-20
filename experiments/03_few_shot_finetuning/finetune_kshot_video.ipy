@@ -1,0 +1,96 @@
+#!/usr/bin/env ipython
+
+import os
+
+CONFIG_FILE="/root/BHRL/mmdet/datasets/one_shot_voc.py"
+def setSedPositionMultiplier(multiplier_index, enableLogging=True):
+  PARAMETER="POSITION_MULTIPLIER"
+  !sed -i 's/SED_PARAMETER_{PARAMETER} = .*/SED_PARAMETER_{PARAMETER} = {multiplier_index}/' {CONFIG_FILE}
+  if enableLogging:
+    !grep "SED_PARAMETER_{PARAMETER}" {CONFIG_FILE}
+def setSedClasses(dataset_name, enableLogging=True):
+  if dataset_name == "DIOR":
+    CLASSLIST = '("airplane", "airport", "baseballfield", "basketballcourt", "bridge", "chimney", "dam", "Expressway-Service-area", "Expressway-toll-station", "golffield", "groundtrackfield", "harbor", "overpass", "ship", "stadium", "storagetank", "tenniscourt", "trainstation", "vehicle", "windmill")'
+    SPLITLIST = '[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]'
+  elif dataset_name == "ArToxOr" or dataset_name == "ArTaxOr":
+    CLASSLIST = '("Araneae", "Coleoptera", "Diptera", "Hemiptera", "Hymenoptera", "Lepidoptera", "Odonata")'
+    SPLITLIST = '[1, 2, 3, 4, 5, 6, 7]'
+  elif dataset_name == "UODD":
+    CLASSLIST = '("0B", "1B", "2B")'
+    SPLITLIST = '[1, 2, 3]'
+  elif dataset_name == "VOT":
+    CLASSLIST = '("aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat", "chair", "cow", "diningtable", "dog", "horse", "motorbike", "person", "pottedplant", "sheep", "sofa", "train", "tvmonitor")'
+    SPLITLIST = '[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]'
+  elif dataset_name == "FSVOD500":
+    CLASSLIST = '("JetLev-Flyer", "amphibian", "aoudad", "asian_crocodile", "autogiro", "ax", "bactrian_camel", "balloon", "bathyscaphe", "belgian_hare", "binturong", "black_rabbit", "black_squirrel", "bow_(weapon)", "brahman", "canada_porcupine", "cheetah", "chiacoan_peccary", "chimaera", "chinese_paddlefish", "coin", "crab", "crayfish", "cruise_missile", "deer", "destroyer_escort", "dumpcart", "elasmobranch", "elk", "fall_cankerworm", "fanaloka", "fish", "flag", "fox", "garden_centipede", "gavial", "gemsbok", "giant_panda", "goat", "guard_ship", "guitar", "hand_truck", "hermit_crab", "hog", "horse_cart", "horseshoe_crab", "humvee", "ibex", "indian_rhinoceros", "lander", "langur", "lappet_caterpillar", "lemur", "leopard", "lesser_panda", "lion", "luge", "malayan_tapir", "minisub", "monkey", "mouflon", "mountain_goat", "orangutan", "pacific_walrus", "peba", "pedicab", "peludo", "pere_davids_deer", "pistol", "pony_cart", "pung", "rabbit", "raccoon", "reconnaissance_vehicle", "rubic_cube", "sassaby", "saxophone", "sepia", "serow", "shark", "shawl", "skibob", "snow_leopard", "snowmobil", "sow", "spider_monkey", "squirrel", "suricate", "tadpole_shrimp", "tiglon", "virginia_deer", "warthog", "whale", "wheelchair", "white-tailed_jackrabbit", "white_crocodile", "white_rabbit", "white_rhinoceros", "white_squirrel", "woolly_monkey")'
+    SPLITLIST = '[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100]'
+  PARAMETER="CLASSES"
+  !sed -i 's/SED_PARAMETER_{PARAMETER} = .*/SED_PARAMETER_{PARAMETER} = {CLASSLIST}/' {CONFIG_FILE}
+  PARAMETER2="SELF_SPLIT"
+  !sed -i 's/SED_PARAMETER_{PARAMETER2} = .*/SED_PARAMETER_{PARAMETER2} = {SPLITLIST}/' {CONFIG_FILE}
+  if enableLogging:
+    !grep "SED_PARAMETER_{PARAMETER}" {CONFIG_FILE}
+    !grep "SED_PARAMETER_{PARAMETER2}" {CONFIG_FILE}
+
+setSedClasses("FSVOD500")
+setSedPositionMultiplier(0)
+
+%cd /root/BHRL
+
+# Full list of all classes please do not modify
+# ITEMS = ["JetLev-Flyer", "amphibian", "aoudad", "asian_crocodile", "autogiro", "ax", "bactrian_camel", "balloon", "bathyscaphe", "belgian_hare", "binturong", "black_rabbit", "black_squirrel", "bow_(weapon)", "brahman", "canada_porcupine", "cheetah", "chiacoan_peccary", "chimaera", "chinese_paddlefish", "coin", "crab", "crayfish", "cruise_missile", "deer", "destroyer_escort", "dumpcart", "elasmobranch", "elk", "fall_cankerworm", "fanaloka", "fish", "flag", "fox", "garden_centipede", "gavial", "gemsbok", "giant_panda", "goat", "guard_ship", "guitar", "hand_truck", "hermit_crab", "hog", "horse_cart", "horseshoe_crab", "humvee", "ibex", "indian_rhinoceros", "lander", "langur", "lappet_caterpillar", "lemur", "leopard", "lesser_panda", "lion", "luge", "malayan_tapir", "minisub", "monkey", "mouflon", "mountain_goat", "orangutan", "pacific_walrus", "peba", "pedicab", "peludo", "pere_david's_deer", "pistol", "pony_cart", "pung", "rabbit", "raccoon", "reconnaissance_vehicle", "rubic_cube", "sassaby", "saxophone", "sepia", "serow", "shark", "shawl", "skibob", "snow_leopard", "snowmobil", "sow", "spider_monkey", "squirrel", "suricate", "tadpole_shrimp", "tiglon", "virginia_deer", "warthog", "whale", "wheelchair", "white-tailed_jackrabbit", "white_crocodile", "white_rabbit", "white_rhinoceros", "white_squirrel", "woolly_monkey"]
+
+RUN_CODE="RUN1"
+split = "fsvod"  # fsvod, split1..split4, voc
+DB="GOT" # GOT, LaSOT, TAO
+
+# FOR GOT
+# ITEMS = ["amphibian", "aoudad", "asian_crocodile", "autogiro", "bactrian_camel", "balloon", "bathyscaphe", "belgian_hare", "binturong", "black_squirrel", "brahman", "canada_porcupine", "cheetah", "chiacoan_peccary", "chimaera", "chinese_paddlefish", "crab", "crayfish", "cruise_missile", "deer", "destroyer_escort", "dumpcart", "elasmobranch", "elk", "fall_cankerworm", "fanaloka", "garden_centipede", "gavial", "gemsbok", "giant_panda", "guard_ship", "hand_truck", "hermit_crab", "horse_cart", "horseshoe_crab", "humvee", "ibex", "indian_rhinoceros", "JetLev-Flyer", "lander", "langur", "lappet_caterpillar", "lemur", "leopard", "lesser_panda", "lion", "luge", "malayan_tapir", "minisub", "monkey", "mouflon", "mountain_goat", "orangutan", "pacific_walrus", "peba", "pedicab", "peludo", "pere_davids_deer", "pony_cart", "pung", "rabbit", "raccoon", "reconnaissance_vehicle", "sassaby", "serow", "skibob", "snow_leopard", "snowmobil", "sow", "spider_monkey", "suricate", "tadpole_shrimp", "tiglon", "virginia_deer", "warthog", "whale", "wheelchair", "white_crocodile", "white_rabbit", "white_rhinoceros", "white-tailed_jackrabbit", "woolly_monkey"]
+ITEMS = ["leopard", "lesser_panda", "lion", "luge", "malayan_tapir", "minisub", "monkey", "mouflon", "mountain_goat", "orangutan", "pacific_walrus", "peba", "pedicab", "peludo", "pere_davids_deer", "pony_cart", "pung", "rabbit", "raccoon", "reconnaissance_vehicle", "sassaby", "serow", "skibob", "snow_leopard", "snowmobil", "sow", "spider_monkey", "suricate", "tadpole_shrimp", "tiglon", "virginia_deer", "warthog", "whale", "wheelchair", "white_crocodile", "white_rabbit", "white_rhinoceros", "white-tailed_jackrabbit", "woolly_monkey"]
+
+for item in ITEMS:
+  setSedClasses(item) # Automatically configure dataloader for selected dataset
+  i_=!find fsvod500_annotation_cb/ft_video_GOT -iname "{item}_*" -type f
+  n = 0
+  for i in i_:
+    n += 1
+    !rm -rf /root/BHRL/work_dirs
+    JSONLIST=["/root/BHRL/fsvod500_annotation_cb/class_separated_"+DB+"/"+item+".json"]
+
+    for json in JSONLIST:
+        basejson=!basename {json} | sed "s/.json//"
+
+        !mkdir -p "/root/BHRL/fsvod_results/MTO/{RUN_CODE}/logs_{split}"
+        !mkdir -p "/root/BHRL/work_dirs/fsvod/BHRL/MTO/{RUN_CODE}/{split}/{item}_{basejson}_{n}"
+        !mkdir -p "/root/BHRL/fsvod_results/MTO/{RUN_CODE}/results_{split}/{item}_{basejson}_{n}"
+
+        train_log_file = f"/root/BHRL/fsvod_results/MTO/{RUN_CODE}/train_{split}_{item}_{basejson}_{n}.out"
+        log_file = f"/root/BHRL/fsvod_results/MTO/{RUN_CODE}/logs_{split}/{item}_{basejson}_run_num_{n}.out"
+        result_file = f"/root/BHRL/fsvod_results/MTO/{RUN_CODE}/results_{split}/{item}_{basejson}_{n}"
+        ann_file = json
+        ft_ann_file = i # json.replace(".json", "_"+str(i)+"_ft.json").replace("class_separated_"+DB, "ft_"+DB)
+
+        cmd = f"""
+        echo EVALUATION OF {item} | tee -a {log_file}
+        python tools/train.py \
+            --resume_from checkpoints/model_{split}.pth \
+            --config configs/vot/BHRL.py \
+            --seq_name {item} \
+            --no-validate \
+            --ann_file {ft_ann_file} \
+            --seq_img_id 0 \
+            --requested_class 20 \
+            --work_dir /root/BHRL/work_dirs/fsvod/BHRL/MTO/{RUN_CODE}/{split}/{item}_{basejson}_{n} 2>&1 | tee -a {train_log_file}
+
+        python tools/test.py \
+            --config "/root/BHRL/configs/vot/BHRL.py" \
+            --seq_name {item} \
+            --part 1 \
+            --ann_file {ann_file} \
+            --checkpoint /root/BHRL/work_dirs/fsvod/BHRL/MTO/{RUN_CODE}/{split}/{item}_{basejson}_{n}/epoch_109.pth \
+            --run_num {n} \
+            --eval bbox \
+            --result_file {result_file} 2>&1 | tee -a {log_file}
+        """
+
+        !{cmd}
